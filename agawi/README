@@ -1,0 +1,13 @@
+Programming problem:
+
+UNDO REDO
+Build a simple undo/redo system in any object-oriented programming
+language. It should meet these criteria:
+      * An unlimited number of operations can be performed, undone and
+        redone
+      * The system is generic and can easily be extended with new
+        kinds of actions
+      * The code is production quality
+      * The undo/redo functionality is demonstrated in a simple
+        console application
+      * It doesn't use heavily platform-specific code

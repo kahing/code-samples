@@ -1,0 +1,37 @@
+ThousandEyes C++ Coding Challenge
+
+Title: Tracking DNS performance to top sites
+
+Importance: Such performance numbers to top sites can be used as benchmarks for others to compare to.
+
+Description:
+Write a c++ program on Linux/BSD(Mac) that periodically sends DNS queries to the nameservers of the top 10 Alexa domains and stores the latency values in a mysql table. The frequency of queries should be specified by the user on command line. The program needs to make sure it doesn't hit the DNS cache while trying to query for a site and should use a random string prepended to a domain. E,g. to query foo.bar, make sure to prepend a random string, e.g. 1234xpto.foo.bar.
+
+Besides the timeseries values, the code needs to keep track in db stats per domain about:
++ the average query times
++ standard deviation of DNS query times
++ number of queries made so far
++ time stamp of first query made per domain and last query made
+
+Refs:
+a. Mysql lib, use mysql++:
+http://tangentsoft.net/mysql++/
+b. DNS lib, use ldns:
+http://www.nlnetlabs.nl/projects/ldns/
+
+Top 10 domains to query:
++------+---------------+
+| rank | name       |
++------+---------------+
+|   1 | google.com  |
+|   2 | facebook.com  |
+|   3 | youtube.com   |
+|   4 | yahoo.com   |
+|   5 | live.com    |
+|   6 | wikipedia.org |
+|   7 | baidu.com   |
+|   8 | blogger.com   |
+|   9 | msn.com     |
+|   10 | qq.com     |
++------+---------------+
+=================================
