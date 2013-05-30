@@ -14,7 +14,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "StringMatcher.h"
+#include "StringMatcher2.h"
 #include <stdlib.h>
 
 int
@@ -24,7 +24,7 @@ main(int argc, char **argv)
 
     std::ifstream ifs(argv[1]);
     std::string s;
-    StringMatcher matcher;
+    StringMatcher2 matcher;
     int cnt = 0;
 
     while (ifs >> s) {
