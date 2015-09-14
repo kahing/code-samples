@@ -66,6 +66,10 @@ static node *reverseN(int N, node *list)
   node *cur = list, *prev = NULL;
   node *head = NULL;
 
+  if (N < 2) {
+    return list;
+  }
+
   while (1) {
     pair ret = reverse_sublist(N, cur);
 
@@ -213,6 +217,11 @@ static void test_reverseN()
   t1 = make_list(1, 0);
   t1 = reverseN(1, t1);
   assert_equal(t1, make_list(1, 0));
+
+  assert_equal(reverseN(11, default_list(5)), reverse(default_list(5)));
+  assert_equal(reverseN(1, default_list(5)), default_list(5));
+
+  assert(reverseN(2, NULL) == NULL);
 }
 
 int
@@ -230,8 +239,6 @@ main(int argc, char *argv[])
   t1 = default_list(6);
   t1 = reverseN(2, t1);
   print_list(t1);
-
-  assert(reverseN(2, NULL) == NULL);
 
   print_list(make_list(1, 2, 0));
 
