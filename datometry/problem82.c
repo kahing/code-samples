@@ -101,6 +101,13 @@ static node *alloc_list(int count)
   return head;
 }
 
+static node *default_list(int count)
+{
+  node *list = alloc_list(count);
+  label(list);
+  return list;
+}
+
 static node *make_list(int n, ...)
 {
   va_list ap;
@@ -149,8 +156,7 @@ static void assert_equal(node *list1, node *list2)
 
 static void test_reverse_sublist()
 {
-  node *t2 = alloc_list(4);
-  label(t2);
+  node *t2 = default_list(4);
   pair ret = reverse_sublist(1, t2);
   assert(ret.first->data == 1);
   assert(ret.first->next == NULL);
@@ -158,8 +164,7 @@ static void test_reverse_sublist()
   assert(ret.second->data == 2);
   assert_equal(ret.second, make_list(2, 3, 4, 0));
 
-  t2 = alloc_list(4);
-  label(t2);
+  t2 = default_list(4);
   ret = reverse_sublist(2, t2);
   assert(ret.first->data == 2);
   assert(ret.first->next->data == 1);
@@ -168,8 +173,7 @@ static void test_reverse_sublist()
   assert(ret.second->data == 3);
   assert_equal(ret.second, make_list(3, 4, 0));
 
-  t2 = alloc_list(2);
-  label(t2);
+  t2 = default_list(2);
   ret = reverse_sublist(2, t2);
   assert(ret.first->data == 2);
   assert(ret.first->next->data == 1);
@@ -179,12 +183,7 @@ static void test_reverse_sublist()
 
 static void test_reverse_size(int n)
 {
-  node *t1 = alloc_list(n);
-  label(t1);
-  node *t2 = alloc_list(n);
-  label(t2);
-  t2 = reverse(reverse(t2));
-  assert_equal(t1, t2);
+  assert_equal(default_list(n), reverse(reverse(default_list(n))));
 }
 
 static void test_reverse()
@@ -192,31 +191,22 @@ static void test_reverse()
   test_reverse_size(6);
   test_reverse_size(1);
 
-  node *t1 = alloc_list(6);
-  label(t1);
-  t1 = reverse(t1);
-  assert_equal(t1, make_list(6, 5, 4, 3, 2, 1, 0));
-
-  t1 = make_list(1, 0);
-  label(t1);
-  t1 = reverse(t1);
-  assert_equal(t1, make_list(1, 0));
+  assert_equal(reverse(make_list(1, 2, 3, 4, 5, 6, 0)), make_list(6, 5, 4, 3, 2, 1, 0));
+  assert_equal(reverse(make_list(1, 0)), make_list(1, 0));
+  assert(reverse(NULL) == NULL);
 }
 
 static void test_reverseN()
 {
-  node *t1 = alloc_list(6);
-  label(t1);
+  node *t1 = default_list(6);
   t1 = reverseN(2, t1);
   assert_equal(t1, make_list(2, 1, 4, 3, 6, 5, 0));
 
-  t1 = alloc_list(6);
-  label(t1);
+  t1 = default_list(6);
   t1 = reverseN(3, t1);
   assert_equal(t1, make_list(3, 2, 1, 6, 5, 4, 0));
 
-  t1 = alloc_list(7);
-  label(t1);
+  t1 = default_list(7);
   t1 = reverseN(3, t1);
   assert_equal(t1, make_list(3, 2, 1, 6, 5, 4, 7, 0));
 
@@ -237,8 +227,7 @@ main(int argc, char *argv[])
   t1 = reverse(t1);
   print_list(t1);
 
-  t1 = alloc_list(6);
-  label(t1);
+  t1 = default_list(6);
   t1 = reverseN(2, t1);
   print_list(t1);
 
