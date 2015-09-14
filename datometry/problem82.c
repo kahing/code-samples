@@ -185,15 +185,15 @@ static void test_reverse_sublist()
   assert(ret.second == NULL);
 }
 
-static void test_reverse_size(int n)
+static void test_double_reverse(int n)
 {
   assert_equal(default_list(n), reverse(reverse(default_list(n))));
 }
 
 static void test_reverse()
 {
-  test_reverse_size(6);
-  test_reverse_size(1);
+  test_double_reverse(6);
+  test_double_reverse(1);
 
   assert_equal(reverse(make_list(1, 2, 3, 4, 5, 6, 0)), make_list(6, 5, 4, 3, 2, 1, 0));
   assert_equal(reverse(make_list(1, 0)), make_list(1, 0));
@@ -213,6 +213,8 @@ static void test_reverseN()
   t1 = default_list(7);
   t1 = reverseN(3, t1);
   assert_equal(t1, make_list(3, 2, 1, 6, 5, 4, 7, 0));
+
+  assert_equal(reverseN(4, default_list(11)), make_list(4, 3, 2, 1, 8, 7, 6, 5, 11, 10, 9, 0));
 
   t1 = make_list(1, 0);
   t1 = reverseN(1, t1);
