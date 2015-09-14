@@ -19,12 +19,12 @@ Assignment
 The following data structure defines elements of a linked list, using typical
 text book convention:
 
-  typedef struct node
-    {
-        int data;
-            struct node *next;
-              }
-                node;
+typedef struct node
+{
+  int data;
+  struct node *next;
+}
+node;
 
 
 
