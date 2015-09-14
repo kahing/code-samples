@@ -61,12 +61,6 @@ static pair reverse_sublist(int n, node *list)
   return ret;
 }
 
-static node *last(node *list)
-{
-  for (; list->next != NULL; list = list->next) {}
-  return list;
-}
-
 static node *reverseN(int N, node *list)
 {
   node *cur = list, *prev = NULL;
@@ -85,7 +79,7 @@ static node *reverseN(int N, node *list)
       break;
     }
 
-    prev = last(ret.first);
+    prev = cur;
     cur = ret.second;
   }
 
@@ -160,7 +154,9 @@ static void test_reverse_sublist()
   pair ret = reverse_sublist(1, t2);
   assert(ret.first->data == 1);
   assert(ret.first->next == NULL);
+  assert_equal(ret.first, make_list(1, 0));
   assert(ret.second->data == 2);
+  assert_equal(ret.second, make_list(2, 3, 4, 0));
 
   t2 = alloc_list(4);
   label(t2);
@@ -168,7 +164,9 @@ static void test_reverse_sublist()
   assert(ret.first->data == 2);
   assert(ret.first->next->data == 1);
   assert(ret.first->next->next == NULL);
+  assert_equal(ret.first, make_list(2, 1, 0));
   assert(ret.second->data == 3);
+  assert_equal(ret.second, make_list(3, 4, 0));
 
   t2 = alloc_list(2);
   label(t2);
@@ -211,6 +209,11 @@ static void test_reverseN()
   label(t1);
   t1 = reverseN(2, t1);
   assert_equal(t1, make_list(2, 1, 4, 3, 6, 5, 0));
+
+  t1 = alloc_list(6);
+  label(t1);
+  t1 = reverseN(3, t1);
+  assert_equal(t1, make_list(3, 2, 1, 6, 5, 4, 0));
 
   t1 = alloc_list(7);
   label(t1);
