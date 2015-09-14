@@ -220,6 +220,7 @@ static void test_reverseN()
 
   assert_equal(reverseN(11, default_list(5)), reverse(default_list(5)));
   assert_equal(reverseN(1, default_list(5)), default_list(5));
+  assert_equal(reverseN(0, default_list(5)), default_list(5));
 
   assert(reverseN(2, NULL) == NULL);
 }
