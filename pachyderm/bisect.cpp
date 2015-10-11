@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -88,19 +89,25 @@ pair<Commit*, int> findNext(Commit *c, Commit *start, int delta) {
     return make_pair(start, 0);
   }
 
-  auto left = findNext(c, start->left_parent_, delta / 2);
-  auto right = findNext(c, start->right_parent_, delta / 2);
-  if (left.first == nullptr) {
-    return findNext(c, right.first, left.second);
-  } else if (right.first == nullptr) {
-    return findNext(c, left.first, right.second);
+  if (start->right_parent_ == nullptr) {
+    return findNext(c, start->left_parent_, delta - 1);
   } else {
-    if (left.first->depth_ > right.first->depth_) {
-      return left;
+    auto left = findNext(c, start->left_parent_, delta / 2);
+    auto right = findNext(c, start->right_parent_, delta / 2);
+    if (left.first == nullptr) {
+      // pick up the remainders
+      return findNext(c, right.first, left.second);
+    } else if (right.first == nullptr) {
+      return findNext(c, left.first, right.second);
     } else {
-      return right;
+      if (left.first->depth_ > right.first->depth_) {
+        return left;
+      } else {
+        return right;
+      }
     }
   }
+
 }
 
 // Bisect returns a commit c such that the following holds:
@@ -111,12 +118,24 @@ pair<Commit*, int> findNext(Commit *c, Commit *start, int delta) {
 // About half are ancestors of c and half aren't.
 Commit *Bisect(set< Commit *> allCommits, set<Commit *> goodCommits,  Commit *badCommit) {
   Commit *c = firstKnownGood(goodCommits, badCommit);
-  int delta = (badCommit->depth_ - c->depth_) / 2;
+  assert(c->depth_ != badCommit->depth_);
+  int delta = (badCommit->depth_ - c->depth_);
+  if (delta == 1) {
+    if (badCommit->left_parent_ == c) {
+      if (badCommit->right_parent_ != nullptr) {
+        return badCommit->right_parent_;
+      } else {
+        return badCommit;
+      }
+    } else {
+      return badCommit->left_parent_;
+    }
+  }
   if (delta == 0) {
     return badCommit;
   }
 
-  auto mid = findNext(c, badCommit, delta);
+  auto mid = findNext(c, badCommit, delta / 2);
   assert(mid.first != nullptr);
   return mid.first;
 }
@@ -155,12 +174,15 @@ typedef  Commit *(*Bisector)( set< Commit *> allCommits, set<Commit *> goodCommi
 // finds the first bad commit
 Commit *findBad(set< Commit *> &allCommits, set<Commit *> &goodCommits,  Commit *badCommit,
                 Bisector bisector) {
-  while (true) {
+  int depth = badCommit->depth_;
+
+  for (int i = 0; ; i++) {
     Commit *mid = bisector(allCommits, goodCommits, badCommit);
     if (mid->good_) {
       goodCommits.insert(mid);
     } else {
       if (mid == badCommit) {
+        assert(i <= ((log(depth) / log(2)) + 1));
         return mid;
       } else {
         badCommit = mid;
@@ -213,5 +235,43 @@ main(int argc, char *argv[]) {
     left = left->newCommit();
   }
   final = left->merge(right);
-  assert(findBad(root, final, Bisect) == right);
+  auto res = findBad(root, final, Bisect);
+  assert(res == right);
+
+  root = new Commit(nullptr, nullptr);
+  left = root->newCommit()->bad();
+  right = root;
+  for (int i = 0; i < 10; i++) {
+    right = right->newCommit();
+  }
+  final = left->merge(right);
+  res = findBad(root, final, Bisect);
+  assert(res == left);
+
+  root = new Commit(nullptr, nullptr);
+  left = root->newCommit()->bad();
+  right = root;
+  for (int i = 0; i < 1000; i++) {
+    right = right->newCommit();
+  }
+  final = left->merge(right);
+  res = findBad(root, final, Bisect);
+  assert(res == left);
+
+  root = new Commit(nullptr, nullptr);
+  left = root;
+  for (int i = 0; i < 10; i++) {
+    left = left->newCommit();
+  }
+  assert(left->depth_ == 10);
+  right = left->newCommit()->newCommit()->bad();
+  assert(right->depth_ == 12);
+  right = right->newCommit()->merge(right->newCommit());
+  assert(right->depth_ == 14);
+  left = left->newCommit()->newCommit()->newCommit();
+  assert(left->depth_ == 13);
+  final = left->merge(right);
+  assert(final->depth_ == 15);
+  res = findBad(root, final, Bisect);
+  assert(res->depth_ == 12);
 }
