@@ -202,7 +202,7 @@ main(int argc, char *argv[]) {
   assert(findBad(root, final, Bisect) == root);
 
   root = new Commit(nullptr, nullptr);
-  Commit *first = root->newCommit();
+  Commit *first = root->newCommit()->bad();
   final = first->newCommit()->newCommit()->newCommit();
   assert(findBad(root, final, Bisect) == first);
 }
