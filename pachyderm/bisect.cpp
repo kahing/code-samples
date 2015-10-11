@@ -116,7 +116,7 @@ Commit *Bisect(set< Commit *> allCommits, set<Commit *> goodCommits,  Commit *ba
     return badCommit;
   }
 
-  auto mid = findNext(firstKnownGood(goodCommits, badCommit), badCommit, delta);
+  auto mid = findNext(c, badCommit, delta);
   assert(mid.first != nullptr);
   return mid.first;
 }
@@ -205,4 +205,13 @@ main(int argc, char *argv[]) {
   Commit *first = root->newCommit()->bad();
   final = first->newCommit()->newCommit()->newCommit();
   assert(findBad(root, final, Bisect) == first);
+
+  root = new Commit(nullptr, nullptr);
+  right = root->newCommit()->bad();
+  left = root;
+  for (int i = 0; i < 10; i++) {
+    left = left->newCommit();
+  }
+  final = left->merge(right);
+  assert(findBad(root, final, Bisect) == right);
 }
