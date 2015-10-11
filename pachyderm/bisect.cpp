@@ -23,6 +23,11 @@ public:
     }
   }
 
+  Commit *bad() {
+    good_ = false;
+    return this;
+  }
+
   bool isAncestorOf(Commit *c);
 
   Commit *newCommit()  {
@@ -165,6 +170,10 @@ Commit *findBad(set< Commit *> &allCommits, set<Commit *> &goodCommits,  Commit 
 }
 
 Commit *findBad( Commit *root,  Commit *bad, Bisector bisector) {
+  if (!root->good_) {
+    return root;
+  }
+
   set< Commit *> allCommits, goodCommits;
   bad->insertAllAncestors(allCommits);
   if (root->good_) {
@@ -187,4 +196,13 @@ main(int argc, char *argv[]) {
   assert(findBad(root, final, BisectStupid) == right);
   assert(findNext(root, final, 1).first == right);
   assert(findBad(root, final, Bisect) == right);
+
+  root = new Commit(nullptr, nullptr);
+  final = root->bad()->newCommit()->newCommit();
+  assert(findBad(root, final, Bisect) == root);
+
+  root = new Commit(nullptr, nullptr);
+  Commit *first = root->newCommit();
+  final = first->newCommit()->newCommit()->newCommit();
+  assert(findBad(root, final, Bisect) == first);
 }
