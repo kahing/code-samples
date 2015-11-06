@@ -137,6 +137,13 @@ public class DataStoreTest {
         assertThat(Files.list(dir).count()).isEqualTo(1);
     }
 
+    @Test
+    public void testRestart() throws Exception {
+        long lsn = post1(new byte[]{9}, 0);
+        ds = new DataStore(dir, 16);
+        assertThat(ds.getNextLSN()).isEqualTo(lsn);
+    }
+
     private void dumpFile(Path p) throws IOException {
         byte[] bytes = ByteStreams.toByteArray(Files.newInputStream(p));
         for (int i = 0; i < bytes.length; i++) {

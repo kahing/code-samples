@@ -183,4 +183,15 @@ public class QueueTest {
         queue.gcNow();
         assertThat(Files.list(dir.resolve("data")).count()).isEqualTo(0);
     }
+
+    @Test
+    public void testRestart() throws Exception {
+        queue.subscribe("foo");
+        queue.post(string2Stream("hello"));
+        queue.post(string2Stream("world"));
+        assertThat(stream2String(queue.get("foo").in)).isEqualTo("hello");
+        queue = new Queue(dir, 16);
+        assertThat(stream2String(queue.get("foo").in)).isEqualTo("world");
+        queue.unsubscribe("foo");
+    }
 }

@@ -17,6 +17,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.base.Throwables.propagate;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,6 +34,7 @@ public class Queue {
     private final DataStore dataStore;
     private final Thread gcThread;
     private long minLSN = 0;
+    private boolean shutdown = false;
 
     public Queue(Path dir, long chunkSize) throws IOException {
         requireNonNull(dir);
@@ -41,18 +43,57 @@ public class Queue {
         }
 
         dataDir = dir.resolve("data");
-        Files.createDirectory(dataDir);
+        if (!Files.isDirectory(dataDir)) {
+            Files.createDirectory(dataDir);
+        }
         subscriptionDir = dir.resolve("subscriptions");
-        Files.createDirectory(subscriptionDir);
-        dataStore = new DataStore(dataDir, chunkSize);
-
+        if (!Files.isDirectory(subscriptionDir)) {
+            Files.createDirectory(subscriptionDir);
+        }
         gcThread = new Thread(() -> {
             while (true) {
+                synchronized (this) {
+                    if (shutdown) {
+                        break;
+                    }
+                }
+
                 gcNow();
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
                 }
+            }
+        });
+
+        init();
+        long maxLSN = 0;
+        synchronized (subscriptions) {
+            for (Subscriber s : subscriptions.values()) {
+                synchronized (s) {
+                    if (s.nextLSN > maxLSN) {
+                        maxLSN = s.nextLSN;
+                    }
+                }
+            }
+        }
+
+        dataStore = new DataStore(dataDir, chunkSize, maxLSN);
+    }
+
+    private void init() throws IOException {
+        Files.list(subscriptionDir).forEach(p -> {
+            String name = p.getFileName().toString();
+            try (FileChannel in = FileChannel.open(p,
+                    StandardOpenOption.READ)) {
+                ByteBuffer buf = ByteBuffer.allocate(8);
+                in.read(buf);
+                buf.position(0);
+                long nextLSN = buf.getLong();
+                subscriptions.put(name, new Subscriber(name, nextLSN));
+                logger.info("discovered subscriber {} @ {}", name, nextLSN);
+            } catch (IOException e) {
+                throw propagate(e);
             }
         });
     }
@@ -124,7 +165,17 @@ public class Queue {
     }
 
     void spawnGCThread() {
+        shutdown = false;
         gcThread.start();
+    }
+
+    void stop() {
+        shutdown = true;
+        try {
+            gcThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     synchronized void gcNow() {

@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.base.Throwables.propagate;
 import static java.util.Objects.requireNonNull;
 
 @Path("/")
@@ -22,9 +23,26 @@ public class Api {
     private final long CHUNK_SIZE;
     private Map<String, Queue> topics = new HashMap<>();
 
-    Api(java.nio.file.Path dir, long chunkSize) {
+    Api(java.nio.file.Path dir, long chunkSize) throws IOException {
         this.dir = requireNonNull(dir);
         this.CHUNK_SIZE = chunkSize;
+        init();
+    }
+
+    private void init() throws IOException {
+        Files.list(dir)
+                .filter(p -> Files.isDirectory(p.resolve("data")) &&
+                        Files.isDirectory(p.resolve("subscriptions")))
+                .forEach(p -> {
+                    try {
+                        String name = p.getFileName().toString();
+                        Queue q = new Queue(p, CHUNK_SIZE);
+                        topics.put(name, q);
+                        q.spawnGCThread();
+                    } catch (IOException e) {
+                        throw propagate(e);
+                    }
+                });
     }
 
     @Path("/{topic}/{username}")

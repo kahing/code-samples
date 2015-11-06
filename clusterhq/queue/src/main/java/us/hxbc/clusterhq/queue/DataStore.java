@@ -4,8 +4,6 @@ import com.google.common.io.ByteStreams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.ClientErrorException;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StreamCorruptedException;
@@ -16,6 +14,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.OptionalLong;
 
 import static java.util.Objects.requireNonNull;
 
@@ -46,12 +45,43 @@ public class DataStore {
     private final long CHUNK_SIZE;
     private long nextLSN;
 
-    DataStore(Path dir, long chunkSize) {
+    DataStore(Path dir, long chunkSize) throws IOException {
+        this(dir, chunkSize, 0);
+    }
+
+    DataStore(Path dir, long chunkSize, long baseLSN) throws IOException {
         this.dir = requireNonNull(dir);
         if ((chunkSize & (chunkSize - 1)) != 0) {
             throw new IllegalArgumentException(chunkSize + " is not power of 2");
         }
         this.CHUNK_SIZE = chunkSize;
+        this.nextLSN = baseLSN;
+        init();
+    }
+
+    private void init() throws IOException {
+        OptionalLong lsn = Files.list(dir)
+                .map(p -> p.getFileName().toString())
+                .mapToLong(s -> Long.parseLong(s, 16))
+                .max();
+        if (lsn.isPresent()) {
+            Path p = dir.resolve(Long.toHexString(lsn.getAsLong()));
+            long size = Files.size(p);
+            long foundLSN = lsn.getAsLong() + size;
+            if (foundLSN < nextLSN) {
+                throw new StreamCorruptedException(foundLSN + " < " + nextLSN);
+            }
+            if (size > CHUNK_SIZE) {
+                foundLSN = getBaseLSN(foundLSN) + CHUNK_SIZE;
+            }
+            nextLSN = foundLSN;
+        } else {
+            if (nextLSN % CHUNK_SIZE != 0) {
+                nextLSN = getBaseLSN(nextLSN) + CHUNK_SIZE;
+            }
+        }
+
+        logger.info("discovered LSN {}", nextLSN);
     }
 
     long getBaseLSN(long lsn) {

@@ -17,7 +17,7 @@ public class Main {
     private static Logger logger = LoggerFactory.getLogger(Main.class);
     final HttpServer server;
 
-    Main(int port, Path dir) {
+    Main(int port, Path dir) throws IOException {
         ResourceConfig rc = new ResourceConfig();
         rc.registerInstances(new Api(dir, 4096));
         if (logger.isDebugEnabled()) {
