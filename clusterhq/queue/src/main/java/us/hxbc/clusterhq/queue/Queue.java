@@ -75,16 +75,18 @@ public class Queue {
 
         synchronized (subscriber) {
             DataStore.Message m = dataStore.get(subscriber.nextLSN);
-            Path p = subscriptionDir.resolve(user);
-            try (FileChannel out = FileChannel.open(p,
-                    StandardOpenOption.WRITE,
-                    StandardOpenOption.TRUNCATE_EXISTING)) {
-                ByteBuffer buf = ByteBuffer.allocate(8).putLong(m.nextLSN);
-                buf.position(0);
-                out.write(buf);
-                out.force(true);
+            if (m.in != null) {
+                Path p = subscriptionDir.resolve(user);
+                try (FileChannel out = FileChannel.open(p,
+                        StandardOpenOption.WRITE,
+                        StandardOpenOption.TRUNCATE_EXISTING)) {
+                    ByteBuffer buf = ByteBuffer.allocate(8).putLong(m.nextLSN);
+                    buf.position(0);
+                    out.write(buf);
+                    out.force(true);
+                }
+                subscriber.nextLSN = m.nextLSN;
             }
-            subscriber.nextLSN = m.nextLSN;
             return m;
         }
     }

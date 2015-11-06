@@ -16,7 +16,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class DataStoreTest {
     @Rule
@@ -84,7 +83,7 @@ public class DataStoreTest {
 
     @Test
     public void testGetNothing() throws Exception {
-        assertThatThrownBy(() -> ds.get(0)).isInstanceOf(ClientErrorException.class);
+        assertThat(ds.get(0).in).isNull();
     }
 
     @Test
@@ -96,17 +95,18 @@ public class DataStoreTest {
 
         lsn = 0;
         int i = 0;
-        try {
-            while (true) {
-                logger.info("retrieving lsn {}", lsn);
-                DataStore.Message m = ds.get(lsn);
+        while (true) {
+            logger.info("retrieving lsn {}", lsn);
+            DataStore.Message m = ds.get(lsn);
+            if (m.in != null) {
                 m.in.close();
                 lsn = m.nextLSN;
                 i++;
+            } else {
+                break;
             }
-        } catch (ClientErrorException e) {
-            assertThat(i).isEqualTo(10);
         }
+        assertThat(i).isEqualTo(10);
     }
 
     private void dumpFile(Path p) throws IOException {

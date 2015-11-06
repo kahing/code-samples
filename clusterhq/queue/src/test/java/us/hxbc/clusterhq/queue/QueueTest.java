@@ -64,14 +64,14 @@ public class QueueTest {
     @Test
     public void testGetNothing() throws Exception {
         queue.subscribe("foo");
-        assertThatThrownBy(() -> queue.get("foo")).isInstanceOf(ClientErrorException.class);
+        assertThat(queue.get("foo").in).isNull();
     }
 
     @Test
     public void testGetAfterPost() throws Exception {
         queue.post(string2Stream("hello"));
         queue.subscribe("foo");
-        assertThatThrownBy(() -> queue.get("foo")).isInstanceOf(ClientErrorException.class);
+        assertThat(queue.get("foo").in).isNull();
     }
 
     @Test
@@ -80,7 +80,7 @@ public class QueueTest {
         queue.post(string2Stream("hello"));
         DataStore.Message m = queue.get("foo");
         assertThat(stream2String(m.in)).isEqualTo("hello");
-        assertThatThrownBy(() -> queue.get("foo")).isInstanceOf(ClientErrorException.class);
+        assertThat(queue.get("foo").in).isNull();
     }
 
     @Test
@@ -92,7 +92,7 @@ public class QueueTest {
         assertThat(stream2String(m.in)).isEqualTo("hello");
         m = queue.get("foo");
         assertThat(stream2String(m.in)).isEqualTo("world");
-        assertThatThrownBy(() -> queue.get("foo")).isInstanceOf(ClientErrorException.class);
+        assertThat(queue.get("foo").in).isNull();
     }
 
     @Test
@@ -109,7 +109,7 @@ public class QueueTest {
             m = queue.get("foo");
             assertThat(stream2String(m.in)).isEqualTo("world!");
         }
-        assertThatThrownBy(() -> queue.get("foo")).isInstanceOf(ClientErrorException.class);
+        assertThat(queue.get("foo").in).isNull();
     }
 
     @Test
@@ -118,7 +118,7 @@ public class QueueTest {
         queue.unsubscribe("foo");
         queue.post(string2Stream("hello"));
         queue.subscribe("foo");
-        assertThatThrownBy(() -> queue.get("foo")).isInstanceOf(ClientErrorException.class);
+        assertThat(queue.get("foo").in).isNull();
     }
 
     @Test

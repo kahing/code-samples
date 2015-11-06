@@ -133,7 +133,7 @@ public class DataStore {
         public final long nextLSN;
 
         Message(InputStream in, long nextLSN) {
-            this.in = requireNonNull(in);
+            this.in = in;
             this.nextLSN = nextLSN;
         }
     }
@@ -144,7 +144,7 @@ public class DataStore {
         long relativeLSN = lsn - baseLSN;
         long chunkSize;
         if (Files.notExists(chunk) || (chunkSize = Files.size(chunk)) < relativeLSN) {
-            throw new ClientErrorException(Response.Status.NOT_FOUND);
+            return new Message(null, nextLSN);
         }
 
         FileChannel in = null;
@@ -153,7 +153,7 @@ public class DataStore {
             logger.debug("seeking to {}/{} in {}", relativeLSN, baseLSN, in.size());
             if (in.size() <= relativeLSN) {
                 in.close();
-                throw new ClientErrorException(Response.Status.NOT_FOUND);
+                return new Message(null, nextLSN);
             }
             in.position(relativeLSN);
             ByteBuffer buf = ByteBuffer.allocate(8);
