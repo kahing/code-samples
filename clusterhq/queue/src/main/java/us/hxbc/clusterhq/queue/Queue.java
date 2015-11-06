@@ -172,6 +172,7 @@ public class Queue {
     void stop() {
         shutdown = true;
         try {
+            gcThread.interrupt();
             gcThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();

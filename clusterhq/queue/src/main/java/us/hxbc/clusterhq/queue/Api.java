@@ -45,6 +45,12 @@ public class Api {
                 });
     }
 
+    public void stop() {
+        synchronized (topics) {
+            topics.values().forEach(q -> q.stop());
+        }
+    }
+
     @Path("/{topic}/{username}")
     @POST
     public Response subscribe(@PathParam("topic") String topic,

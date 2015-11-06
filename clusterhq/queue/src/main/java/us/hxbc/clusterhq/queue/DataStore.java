@@ -182,6 +182,7 @@ public class DataStore {
                 long lsn = Long.parseLong(name, 16);
                 if (lsn < baseLSN) {
                     try {
+                        logger.info("gc deleting {}", p);
                         Files.delete(p);
                     } catch (IOException e) {
                         e.printStackTrace();

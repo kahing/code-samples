@@ -16,10 +16,12 @@ import java.nio.file.Paths;
 public class Main {
     private static Logger logger = LoggerFactory.getLogger(Main.class);
     final HttpServer server;
+    final Api api;
 
     Main(int port, Path dir) throws IOException {
         ResourceConfig rc = new ResourceConfig();
-        rc.registerInstances(new Api(dir, 4096));
+        api = new Api(dir, 4096);
+        rc.registerInstances(api);
         if (logger.isDebugEnabled()) {
             rc.register(new LoggingFilter(java.util.logging.Logger.getGlobal(), false));
         }
@@ -28,6 +30,15 @@ public class Main {
 
     void start() throws IOException {
         server.start();
+    }
+
+    public int getPort() {
+        return server.getListeners().stream().findAny().map(n -> n.getPort()).orElse(0);
+    }
+
+    void stop() {
+        api.stop();
+        server.shutdownNow();
     }
 
     public static void main(String[] args) throws IOException {
