@@ -96,6 +96,32 @@ public class QueueTest {
     }
 
     @Test
+    public void testGetMany() throws Exception {
+        queue.subscribe("foo");
+        for (int i = 0; i < 10; i++) {
+            queue.post(string2Stream("hello, "));
+            queue.post(string2Stream("world!"));
+        }
+        DataStore.Message m;
+        for (int i = 0; i < 10; i++) {
+            m = queue.get("foo");
+            assertThat(stream2String(m.in)).isEqualTo("hello, ");
+            m = queue.get("foo");
+            assertThat(stream2String(m.in)).isEqualTo("world!");
+        }
+        assertThatThrownBy(() -> queue.get("foo")).isInstanceOf(ClientErrorException.class);
+    }
+
+    @Test
+    public void testResubscribeGet() throws Exception {
+        queue.subscribe("foo");
+        queue.unsubscribe("foo");
+        queue.post(string2Stream("hello"));
+        queue.subscribe("foo");
+        assertThatThrownBy(() -> queue.get("foo")).isInstanceOf(ClientErrorException.class);
+    }
+
+    @Test
     public void testUnsubscribe() throws Exception {
         queue.subscribe("foo");
         queue.unsubscribe("foo");

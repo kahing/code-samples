@@ -19,6 +19,23 @@ import java.nio.file.StandardOpenOption;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * DataStore stores messages for our queue. Logically it's a log structured
+ * append only data store. Logs are chunked into different files so old
+ * messages can be garbage collected relatively easily.
+ *
+ * each message has a LSN (log sequence number) which is a 64 bit always
+ * incrementing number. LSN is also the logical address of the position
+ * of the message.
+ *
+ * LSN is translated to physical files base on the configured chunk size.
+ * Suppose chunk size is 4, then LSN 0 would be in a file called "0", LSN
+ * 4 would be in a file called "1", and so on. The file names are hex encoded.
+ *
+ * LSN marks the beginning of the message, so if LSN 0 is a message that's
+ * 5 bytes, it will still be in a file called "0". The next message will get
+ * LSN 8 so that it will begin at offset 0 in the file "2".
+ */
 public class DataStore {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private Path dir;

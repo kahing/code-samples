@@ -15,6 +15,12 @@ import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Queue manages subscriptions. It uses DataStore to store the actual
+ * messages. Each subscription contains the next LSN to start
+ * retrieving messages at. This LSN is updated each time a message is
+ * retrieved.
+ */
 public class Queue {
     private static final long CHUNK_SIZE = 4 * 1024; // 4KB
     private final Path dataDir, subscriptionDir;
