@@ -11,11 +11,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
 
+@Path("/")
 public class Api {
     private final java.nio.file.Path dir;
     private final long CHUNK_SIZE;
@@ -28,9 +30,10 @@ public class Api {
 
     @Path("/{topic}/{username}")
     @POST
-    public void subscribe(@PathParam("topic") String topic,
+    public Response subscribe(@PathParam("topic") String topic,
                           @PathParam("username") String username) throws IOException {
         ensureTopic(topic).subscribe(username);
+        return Response.ok().build();
     }
 
     private Queue ensureTopic(@PathParam("topic") String topic) throws IOException {
@@ -38,7 +41,9 @@ public class Api {
         synchronized (topics) {
             q = topics.get(topic);
             if (q == null) {
-                q = new Queue(dir, CHUNK_SIZE);
+                java.nio.file.Path p = dir.resolve(topic);
+                Files.createDirectory(p);
+                q = new Queue(p, CHUNK_SIZE);
                 topics.put(topic, q);
             }
         }
@@ -47,7 +52,7 @@ public class Api {
 
     @Path("/{topic}/{username}")
     @DELETE
-    public void unsubscribe(@PathParam("topic") String topic,
+    public Response unsubscribe(@PathParam("topic") String topic,
                             @PathParam("username") String username) throws IOException {
         Queue q;
         synchronized (topics) {
@@ -55,18 +60,20 @@ public class Api {
         }
 
         if (q == null) {
-            throw new ClientErrorException(Response.Status.NOT_FOUND);
+            return Response.status(Response.Status.NOT_FOUND).build();
         } else {
             q.unsubscribe(username);
+            return Response.ok().build();
         }
     }
 
     @Path("/{topic}")
     @POST
-    public void publish(@PathParam("topic") String topic,
+    public Response publish(@PathParam("topic") String topic,
                         @Context Request request) throws IOException {
         ensureTopic(topic).post(request.getInputStream());
         request.getInputStream().close();
+        return Response.ok().build();
     }
 
     @Path("/{topic}/{username}")

@@ -1,6 +1,6 @@
 package us.hxbc.clusterhq.queue;
 
-import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
@@ -27,9 +27,11 @@ public class Main {
             System.exit(1);
         }
 
-        HttpServer server;
         ResourceConfig rc = new ResourceConfig();
-        rc.register(new Api(dir, 4096));
+        rc.registerInstances(new Api(dir, 4096));
+        if (logger.isDebugEnabled()) {
+            rc.register(new LoggingFilter(java.util.logging.Logger.getGlobal(), false));
+        }
         GrizzlyHttpServerFactory.createHttpServer(URI.create("http://0.0.0.0:" + port), rc);
     }
 }
