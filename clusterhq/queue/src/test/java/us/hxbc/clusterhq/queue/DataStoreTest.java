@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class DataStoreTest {
     @Rule
@@ -46,11 +47,13 @@ public class DataStoreTest {
     @Test
     public void testPostEmpty() throws Exception {
         post1(new byte[0], 0);
+        assertThat(ds.getNextLSN()).isEqualTo(8);
     }
 
     @Test
     public void testPost1() throws Exception {
         post1(new byte[]{9}, 0);
+        assertThat(ds.getNextLSN()).isEqualTo(9);
     }
 
     @Test
@@ -58,6 +61,9 @@ public class DataStoreTest {
         long lsn = 0;
         lsn = post1(new byte[]{9}, lsn);
         lsn = post1(new byte[]{8, 9}, lsn);
+
+        // should wrap to next chunk
+        assertThat(ds.getNextLSN()).isEqualTo(32);
     }
 
     @Test
@@ -74,6 +80,11 @@ public class DataStoreTest {
         try (InputStream in = ds.get(lsn).in) {
             assertThat(ByteStreams.toByteArray(in)).isEqualTo(payload);
         }
+    }
+
+    @Test
+    public void testGetNothing() throws Exception {
+        assertThatThrownBy(() -> ds.get(0)).isInstanceOf(ClientErrorException.class);
     }
 
     @Test

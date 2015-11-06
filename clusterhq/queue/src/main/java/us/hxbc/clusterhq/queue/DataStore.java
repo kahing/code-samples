@@ -42,6 +42,10 @@ public class DataStore {
         return dir.resolve(name);
     }
 
+    public long getNextLSN() {
+        return nextLSN;
+    }
+
     public synchronized long post(InputStream data) throws IOException {
         long baseLSN = getBaseLSN(nextLSN);
         Path chunk = getChunkPath(baseLSN);
@@ -130,7 +134,7 @@ public class DataStore {
         try {
             in = FileChannel.open(chunk, StandardOpenOption.READ);
             logger.debug("seeking to {}/{} in {}", relativeLSN, baseLSN, in.size());
-            if (in.size() < relativeLSN) {
+            if (in.size() <= relativeLSN) {
                 in.close();
                 throw new ClientErrorException(Response.Status.NOT_FOUND);
             }
