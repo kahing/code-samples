@@ -63,7 +63,7 @@ public class DataStore {
         return dir.resolve(name);
     }
 
-    public long getNextLSN() {
+    public synchronized long getNextLSN() {
         return nextLSN;
     }
 
@@ -111,10 +111,12 @@ public class DataStore {
                 throw new IllegalArgumentException(nwritten + " != 8");
             }
             out.force(true);
-            nextLSN += total + 8;
-            if (getBaseLSN(nextLSN) != baseLSN) {
-                // we exceeded this chunk, round this up to the next chunk
-                nextLSN = getBaseLSN(nextLSN) + CHUNK_SIZE;
+            synchronized (this) {
+                nextLSN += total + 8;
+                if (getBaseLSN(nextLSN) != baseLSN) {
+                    // we exceeded this chunk, round this up to the next chunk
+                    nextLSN = getBaseLSN(nextLSN) + CHUNK_SIZE;
+                }
             }
         } catch (IOException e) {
             // truncate the file back to the original size
@@ -191,12 +193,12 @@ public class DataStore {
                         String.format("%s/%s is %s bytes but chunk is %s bytes", relativeLSN, lsn, messageSize, chunkSize));
             }
 
-            long nextLSN = lsn + 8 + messageSize;
-            if (getBaseLSN(nextLSN) != baseLSN) {
+            long lsnAfter = lsn + 8 + messageSize;
+            if (getBaseLSN(lsnAfter) != baseLSN) {
                 // we exceeded this chunk, round this up to the next chunk
-                nextLSN = getBaseLSN(nextLSN) + CHUNK_SIZE;
+                lsnAfter = getBaseLSN(lsnAfter) + CHUNK_SIZE;
             }
-            return new Message(ByteStreams.limit(Channels.newInputStream(in), messageSize), nextLSN);
+            return new Message(ByteStreams.limit(Channels.newInputStream(in), messageSize), lsnAfter);
         } catch (BufferUnderflowException e) {
             throw new IOException(e);
         } catch (IOException e) {

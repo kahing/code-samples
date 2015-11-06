@@ -1,5 +1,8 @@
 package us.hxbc.clusterhq.queue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -24,6 +27,7 @@ import static java.util.Objects.requireNonNull;
  */
 public class Queue {
     private static final long CHUNK_SIZE = 4 * 1024; // 4KB
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final Path dataDir, subscriptionDir;
     private final Map<String, Subscriber> subscriptions = new HashMap<>();
     private final DataStore dataStore;
@@ -124,7 +128,7 @@ public class Queue {
     }
 
     synchronized void gcNow() {
-        long curMinLSN = Long.MAX_VALUE;
+        long curMinLSN = dataStore.getNextLSN();
 
         synchronized (subscriptions) {
             for (Subscriber s : subscriptions.values()) {
@@ -136,6 +140,7 @@ public class Queue {
             }
         }
 
+        logger.info("GC up to {}", curMinLSN);
         if (curMinLSN > minLSN) {
             dataStore.gc(curMinLSN);
             minLSN = curMinLSN;

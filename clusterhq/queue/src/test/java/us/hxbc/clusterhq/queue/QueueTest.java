@@ -173,4 +173,14 @@ public class QueueTest {
         queue.gcNow();
         assertThat(Files.list(dir.resolve("data")).count()).isEqualTo(1);
     }
+
+    @Test
+    public void testGcAgain() throws Exception {
+        queue.gcNow();
+        testGcNone2Users();
+        assertThat(stream2String(queue.get("bar").in)).isEqualTo("world");
+        assertThat(Files.list(dir.resolve("data")).count()).isEqualTo(1);
+        queue.gcNow();
+        assertThat(Files.list(dir.resolve("data")).count()).isEqualTo(0);
+    }
 }
