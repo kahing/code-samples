@@ -2,7 +2,6 @@ package us.hxbc.clusterhq.queue;
 
 import org.glassfish.grizzly.http.server.Request;
 
-import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -45,6 +44,7 @@ public class Api {
                 Files.createDirectory(p);
                 q = new Queue(p, CHUNK_SIZE);
                 topics.put(topic, q);
+                q.spawnGCThread();
             }
         }
         return q;

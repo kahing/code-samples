@@ -5,6 +5,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StreamCorruptedException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
@@ -26,6 +27,8 @@ public class Queue {
     private final Path dataDir, subscriptionDir;
     private final Map<String, Subscriber> subscriptions = new HashMap<>();
     private final DataStore dataStore;
+    private final Thread gcThread;
+    private long minLSN = 0;
 
     public Queue(Path dir, long chunkSize) throws IOException {
         requireNonNull(dir);
@@ -38,6 +41,16 @@ public class Queue {
         subscriptionDir = dir.resolve("subscriptions");
         Files.createDirectory(subscriptionDir);
         dataStore = new DataStore(dataDir, chunkSize);
+
+        gcThread = new Thread(() -> {
+            while (true) {
+                gcNow();
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                }
+            }
+        });
     }
 
     public void subscribe(String user) throws IOException {
@@ -73,9 +86,13 @@ public class Queue {
             }
         }
 
-        synchronized (subscriber) {
-            DataStore.Message m = dataStore.get(subscriber.nextLSN);
-            if (m.in != null) {
+        DataStore.Message m = dataStore.get(subscriber.nextLSN);
+        if (m.in != null) {
+            if (m.nextLSN <= subscriber.nextLSN) {
+                throw new StreamCorruptedException(m.nextLSN + " <= " + subscriber.nextLSN);
+            }
+
+            synchronized (subscriber) {
                 Path p = subscriptionDir.resolve(user);
                 try (FileChannel out = FileChannel.open(p,
                         StandardOpenOption.WRITE,
@@ -87,8 +104,9 @@ public class Queue {
                 }
                 subscriber.nextLSN = m.nextLSN;
             }
-            return m;
         }
+
+        return m;
     }
 
     public void unsubscribe(String user) throws IOException {
@@ -98,6 +116,29 @@ public class Queue {
                 throw new ClientErrorException(Response.Status.NOT_FOUND);
             }
             subscriptions.remove(user);
+        }
+    }
+
+    void spawnGCThread() {
+        gcThread.start();
+    }
+
+    synchronized void gcNow() {
+        long curMinLSN = Long.MAX_VALUE;
+
+        synchronized (subscriptions) {
+            for (Subscriber s : subscriptions.values()) {
+                synchronized (s) {
+                    if (s.nextLSN < curMinLSN) {
+                        curMinLSN = s.nextLSN;
+                    }
+                }
+            }
+        }
+
+        if (curMinLSN > minLSN) {
+            dataStore.gc(curMinLSN);
+            minLSN = curMinLSN;
         }
     }
 

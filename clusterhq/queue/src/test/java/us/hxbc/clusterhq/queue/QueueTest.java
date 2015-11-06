@@ -128,4 +128,49 @@ public class QueueTest {
         Path p = dir.resolve("subscriptions").resolve("foo");
         assertThat(Files.exists(p)).isFalse();
     }
+
+    @Test
+    public void testGCNone() throws Exception {
+        queue.subscribe("foo");
+        queue.post(string2Stream("hello"));
+        queue.gcNow();
+        assertThat(stream2String(queue.get("foo").in)).isEqualTo("hello");
+    }
+
+    @Test
+    public void testGCUnsubscribed() throws Exception {
+        queue.subscribe("foo");
+        queue.post(string2Stream("hello"));
+        queue.post(string2Stream("world"));
+        queue.unsubscribe("foo");
+        assertThat(Files.list(dir.resolve("data")).count()).isEqualTo(1);
+        queue.gcNow();
+        assertThat(Files.list(dir.resolve("data")).count()).isEqualTo(0);
+    }
+
+    @Test
+    public void testGCMsgGot() throws Exception {
+        queue.subscribe("foo");
+        queue.post(string2Stream("hello"));
+        queue.post(string2Stream("world"));
+        assertThat(stream2String(queue.get("foo").in)).isEqualTo("hello");
+        assertThat(stream2String(queue.get("foo").in)).isEqualTo("world");
+        assertThat(Files.list(dir.resolve("data")).count()).isEqualTo(1);
+        queue.gcNow();
+        assertThat(Files.list(dir.resolve("data")).count()).isEqualTo(0);
+    }
+
+    @Test
+    public void testGcNone2Users() throws Exception {
+        queue.subscribe("foo");
+        queue.subscribe("bar");
+        queue.post(string2Stream("hello"));
+        queue.post(string2Stream("world"));
+        assertThat(stream2String(queue.get("foo").in)).isEqualTo("hello");
+        assertThat(stream2String(queue.get("foo").in)).isEqualTo("world");
+        assertThat(stream2String(queue.get("bar").in)).isEqualTo("hello");
+        assertThat(Files.list(dir.resolve("data")).count()).isEqualTo(1);
+        queue.gcNow();
+        assertThat(Files.list(dir.resolve("data")).count()).isEqualTo(1);
+    }
 }
