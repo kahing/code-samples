@@ -35,6 +35,10 @@ import static java.util.Objects.requireNonNull;
  * LSN marks the beginning of the message, so if LSN 0 is a message that's
  * 5 bytes, it will still be in a file called "0". The next message will get
  * LSN 8 so that it will begin at offset 0 in the file "2".
+ *
+ * Garbage collection works by simply deleting chunks that are no longer in
+ * need. If a chunk may still be needed, we try to be conservative and not
+ * touch it. Behavior is undefined if you request a LSN that is already GC'ed.
  */
 public class DataStore {
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -135,6 +139,25 @@ public class DataStore {
         Message(InputStream in, long nextLSN) {
             this.in = in;
             this.nextLSN = nextLSN;
+        }
+    }
+
+    public void gc(long needLSN) {
+        long baseLSN = getBaseLSN(needLSN);
+        try {
+            Files.list(dir).forEach(p -> {
+                String name = p.getFileName().toString();
+                long lsn = Long.parseLong(name, 16);
+                if (lsn < baseLSN) {
+                    try {
+                        Files.delete(p);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -109,6 +109,34 @@ public class DataStoreTest {
         assertThat(i).isEqualTo(10);
     }
 
+    @Test
+    public void testGCAll() throws Exception {
+        testPost2();
+        long lsn = ds.getNextLSN();
+        assertThat(Files.list(dir).count()).isEqualTo(1);
+        ds.gc(lsn);
+        assertThat(Files.list(dir).count()).isEqualTo(0);
+    }
+
+    @Test
+    public void testGCOneChunk() throws Exception {
+        testPost2Chunks();
+        long lsn = ds.getNextLSN();
+        assertThat(Files.list(dir).count()).isEqualTo(2);
+        ds.gc(lsn);
+        assertThat(Files.list(dir).count()).isEqualTo(1);
+    }
+
+    @Test
+    public void testGCNone() throws Exception {
+        long lsn = 0;
+        lsn = post1(new byte[]{9}, lsn);
+        post1(new byte[]{8, 9}, lsn);
+        assertThat(Files.list(dir).count()).isEqualTo(1);
+        ds.gc(lsn);
+        assertThat(Files.list(dir).count()).isEqualTo(1);
+    }
+
     private void dumpFile(Path p) throws IOException {
         byte[] bytes = ByteStreams.toByteArray(Files.newInputStream(p));
         for (int i = 0; i < bytes.length; i++) {
