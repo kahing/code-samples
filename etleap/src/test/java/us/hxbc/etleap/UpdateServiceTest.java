@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.StringReader;
+import java.net.URL;
 
 import static org.mockito.Mockito.*;
 
@@ -12,7 +13,7 @@ public class UpdateServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        service = mock(UpdateService.class);
+        service = spy(new UpdateService(new URL("http://www.example.com/neverused")));
         String data = "file { \"/tmp/hello\":\n" +
                 "source => \"http://host.com/path/to/hello\"\n" +
                 "}\n" +
@@ -20,7 +21,7 @@ public class UpdateServiceTest {
                 "source => \"http://host.com/bar/foo\"\n" +
                 "}";
 
-        when(service.openURL()).thenReturn(new StringReader(data));
+        doReturn(new StringReader(data)).when(service).openURL();
     }
 
     @Test
@@ -31,23 +32,10 @@ public class UpdateServiceTest {
 
     @Test
     public void testStart() throws Exception {
+        doNothing().when(service).update();
         service.start(1000);
         Thread.sleep(1500);
         service.stop();
-        //verify(service, atLeastOnce()).update();
-        /*
-        the above test fails with:
-        org.mockito.exceptions.verification.WantedButNotInvoked:
-Wanted but not invoked:
-updateService.update();
--> at us.hxbc.etleap.UpdateServiceTest.testStart(UpdateServiceTest.java:37)
-
-However, there were other interactions with this mock:
-updateService.start(1000);
--> at us.hxbc.etleap.UpdateServiceTest.testStart(UpdateServiceTest.java:34)
-
-updateService.stop();
--> at us.hxbc.etleap.UpdateServiceTest.testStart(UpdateServiceTest.java:36)
-         */
+        verify(service, atLeast(2)).update();
     }
 }
