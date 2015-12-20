@@ -38,6 +38,12 @@ public class FileConfig {
 
     void apply() {
         logger.info("replacing {} with {}", path, updatePath);
+        try {
+            Files.createDirectories(path.getParent());
+        } catch (IOException e) {
+            logger.error("unable to create path", e);
+        }
+
         try (InputStream is = updatePath.openStream()) {
             try (OutputStream os = Files.newOutputStream(path,
                     StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
