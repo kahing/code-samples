@@ -18,3 +18,4 @@ a.out
 # java/maven output
 *.class
 target/
+.idea/
