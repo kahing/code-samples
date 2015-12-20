@@ -41,12 +41,9 @@ public class FileConfigTest {
 
     @Test
     public void testApply() throws Exception {
-        FileConfig configMock = mock(FileConfig.class);
-        when(configMock.getPath()).thenReturn(config.getPath());
-        when(configMock.getUpdatePath()).thenReturn(config.getUpdatePath());
-        when(configMock.openStream()).thenReturn(new ByteArrayInputStream("hello world".getBytes()));
+        FileConfig configMock = spy(config);
+        doReturn(new ByteArrayInputStream("hello world".getBytes())).when(configMock).openStream();
         configMock.apply();
-        verify(configMock, atLeastOnce()).apply();
         assertThat(configMock.getPath()).hasContent("hello world");
     }
 }
