@@ -11,6 +11,6 @@ public class Main {
         }
 
         URL url = new URL(args[0]);
-        new UpdateService(url).start(5 * 60 * 1024);
+        new UpdateService(url).start(5 * 60 * 1000);
     }
 }
