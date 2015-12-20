@@ -16,11 +16,11 @@ public class UpdateService {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private URL url;
     private Object cv = new Object();
-    private boolean running;
+    private boolean running = true;
     private Thread runner;
 
     public UpdateService(URL url) {
-        url = requireNonNull(url);
+        this.url = requireNonNull(url);
     }
 
     Reader openURL() throws IOException {
