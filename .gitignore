@@ -14,3 +14,7 @@ a.out
 *.lai
 *.la
 *.a
+
+# java/maven output
+*.class
+target/
