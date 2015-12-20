@@ -26,8 +26,8 @@
       <file leaf-file-name="UpdateService.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/us/hxbc/etleap/UpdateService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6771488">
-              <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.21593292">
+              <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -39,8 +39,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JUnit3 Test Class" />
-        <option value="JUnit4 Test Class" />
         <option value="Class" />
+        <option value="JUnit4 Test Class" />
       </list>
     </option>
   </component>
@@ -54,11 +54,12 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/java/us/hxbc/etleap/Config.java" />
         <option value="$PROJECT_DIR$/src/test/java/us/hxbc/etleap/config/FileConfigTest.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/test/java/us/hxbc/etleap/config/ConfigTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/us/hxbc/etleap/config/FileConfig.java" />
         <option value="$PROJECT_DIR$/src/main/java/us/hxbc/etleap/config/Config.java" />
         <option value="$PROJECT_DIR$/src/main/java/us/hxbc/etleap/Main.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/test/java/us/hxbc/etleap/UpdateServiceTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/us/hxbc/etleap/UpdateService.java" />
       </list>
     </option>
@@ -142,6 +143,36 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="etleap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="etleap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="etleap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="etleap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -217,6 +248,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="etleap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="etleap" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assembly" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -244,6 +297,7 @@
       <recent name="junit.framework.TestCase" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="us.hxbc.etleap" />
       <recent name="us.hxbc.etleap.config" />
     </key>
   </component>
@@ -441,80 +495,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4004193">
-          <caret line="49" column="8" selection-start-line="49" selection-start-column="8" selection-end-line="49" selection-end-column="8" />
-          <folding>
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1450637555693" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/us/hxbc/etleap/config/FileConfigTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20754717">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <marker date="1450637438357" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1450637438357" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1450637438357" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1450637438357" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/us/hxbc/etleap/config/ConfigTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09224319">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding>
-            <marker date="1450638401837" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1450638401837" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1450638401837" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/us/hxbc/etleap/config/FileConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6226415">
-          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
-          <folding>
-            <marker date="1450638581897" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1450638581897" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1450638581897" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1450638581897" expanded="true" signature="-1:-1" placeholder=" { " />
-            <marker date="1450638581897" expanded="true" signature="-1:-1" placeholder=" }" />
-            <marker date="1450638581897" expanded="true" signature="-1:-1" placeholder=" { " />
-            <marker date="1450638581897" expanded="true" signature="-1:-1" placeholder=" }" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/us/hxbc/etleap/config/Config.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.16142558">
@@ -542,10 +522,115 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4947589">
+          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding>
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640298729" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/us/hxbc/etleap/config/ConfigTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.34591195">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding>
+            <marker date="1450638401837" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1450638401837" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1450638401837" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/us/hxbc/etleap/config/FileConfigTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20754717">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding>
+            <marker date="1450637438357" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1450637438357" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1450637438357" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1450637438357" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/us/hxbc/etleap/config/FileConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6226415">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding>
+            <marker date="1450638581897" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1450638581897" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1450638581897" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1450638581897" expanded="false" signature="-1:-1" placeholder=" { " />
+            <marker date="1450638581897" expanded="false" signature="-1:-1" placeholder=" }" />
+            <marker date="1450638581897" expanded="false" signature="-1:-1" placeholder=" { " />
+            <marker date="1450638581897" expanded="false" signature="-1:-1" placeholder=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/us/hxbc/etleap/UpdateServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5073375">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding>
+            <marker date="1450640617341" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1450640617341" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1450640617341" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/assembly/jar-with-dependencies.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1450640776041" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640776041" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640776041" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640776041" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640776041" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640776041" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640776041" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640776041" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1450640776041" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/us/hxbc/etleap/UpdateService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6771488">
-          <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.21593292">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
           <folding />
         </state>
       </provider>
