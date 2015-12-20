@@ -1,8 +1,10 @@
 package us.hxbc.etleap.config;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableList;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +12,32 @@ import java.util.List;
 public class Config {
     private List<FileConfig> configs = new ArrayList<>();
 
-    Config(InputStream is) {
-        StreamTokenizer tokens = new StreamTokenizer(new InputStreamReader(is));
+    Config(Reader reader) throws IOException {
+        StreamTokenizer tokens = new StreamTokenizer(reader);
         tokens.quoteChar('"');
 
+        while (tokens.nextToken() != StreamTokenizer.TT_EOF) {
+            tokens.pushBack();
+
+            String section = expect(tokens, null);
+            if (section.equals("file")) {
+                expectSymbol(tokens, "{");
+
+                configs.add(new FileConfig(tokens));
+                expectSymbol(tokens, "}");
+            }
+        }
+    }
+
+    public void apply() {
+        for (FileConfig c : configs) {
+            c.apply();
+        }
+    }
+
+    @VisibleForTesting
+    List<FileConfig> getConfigs() {
+        return ImmutableList.copyOf(configs);
     }
 
     static void expectSymbol(StreamTokenizer tokens, String symbol) throws IOException {
@@ -38,5 +62,4 @@ public class Config {
 
         return tokens.sval;
     }
-
 }
