@@ -4,10 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.StringReader;
-import java.net.URL;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class UpdateServiceTest {
     UpdateService service;
@@ -15,10 +13,6 @@ public class UpdateServiceTest {
     @Before
     public void setUp() throws Exception {
         service = mock(UpdateService.class);
-    }
-
-    @Test
-    public void testUpdate() throws Exception {
         String data = "file { \"/tmp/hello\":\n" +
                 "source => \"http://host.com/path/to/hello\"\n" +
                 "}\n" +
@@ -27,6 +21,18 @@ public class UpdateServiceTest {
                 "}";
 
         when(service.openURL()).thenReturn(new StringReader(data));
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
         service.update();
+        verify(service, atLeast(1)).update();
+    }
+
+    @Test
+    public void testStart() throws Exception {
+        service.start(1000);
+        Thread.sleep(1500);
+        service.stop();
     }
 }

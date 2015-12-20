@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 
 import static com.google.common.base.Throwables.propagate;
@@ -36,21 +37,37 @@ public class FileConfig {
         tokens.pushBack(); // give the closing brace to parent
     }
 
-    void apply() {
-        logger.info("replacing {} with {}", path, updatePath);
+    InputStream openStream() throws IOException {
+        return getUpdatePath().openStream();
+    }
+
+    void update(InputStream is) throws IOException {
+        Path t = Files.createTempFile(getPath().getParent(), getPath().getFileName().toString(), ".tmp");
+
+        try (OutputStream os = Files.newOutputStream(t,
+                StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
+            ByteStreams.copy(is, os);
+        } catch (IOException e) {
+            logger.error("unable to write file", e);
+        }
+
         try {
-            Files.createDirectories(path.getParent());
+            Files.move(t, getPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            logger.error("unable to rename", e);
+        }
+    }
+
+    void apply() {
+        logger.info("replacing {} with {}", getPath(), getUpdatePath());
+        try {
+            Files.createDirectories(getPath().getParent());
         } catch (IOException e) {
             logger.error("unable to create path", e);
         }
 
-        try (InputStream is = updatePath.openStream()) {
-            try (OutputStream os = Files.newOutputStream(path,
-                    StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
-                ByteStreams.copy(is, os);
-            } catch (IOException e) {
-                logger.error("unable to replace file", e);
-            }
+        try (InputStream is = openStream()) {
+            update(is);
         } catch (IOException e) {
             logger.error("unable to download update", e);
             throw propagate(e);

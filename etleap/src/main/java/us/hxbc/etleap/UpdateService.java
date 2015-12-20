@@ -42,7 +42,7 @@ public class UpdateService {
         }
     }
 
-    public void start() {
+    public void start(int sleep) {
         runner = new Thread(() -> {
             logger.info("started, polling {} every 5 minutes", url);
 
@@ -55,7 +55,7 @@ public class UpdateService {
                     }
 
                     try {
-                        cv.wait(5 * 60 * 1000); // 5 minutes
+                        cv.wait(sleep);
                     } catch (InterruptedException e) {
                         continue;
                     }
