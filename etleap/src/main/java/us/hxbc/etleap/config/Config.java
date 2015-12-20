@@ -12,7 +12,7 @@ import java.util.List;
 public class Config {
     private List<FileConfig> configs = new ArrayList<>();
 
-    Config(Reader reader) throws IOException {
+    public Config(Reader reader) throws IOException {
         StreamTokenizer tokens = new StreamTokenizer(reader);
         tokens.quoteChar('"');
 

@@ -11,5 +11,6 @@ public class Main {
         }
 
         URL url = new URL(args[0]);
+        new UpdateService(url).start();
     }
 }
