@@ -53,6 +53,11 @@
             <artifactId>twitter4j-core</artifactId>
             <version>4.0.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-stream</artifactId>
+            <version>4.0.4</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -102,6 +107,21 @@
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <forkedProcessTimeoutInSeconds>300</forkedProcessTimeoutInSeconds>
                     <runOrder>random</runOrder>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>us.hxbc.medisas.tweets.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
