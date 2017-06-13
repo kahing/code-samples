@@ -122,6 +122,7 @@
                 </executions>
                 <configuration>
                     <mainClass>us.hxbc.medisas.tweets.Main</mainClass>
+                    <commandlineArgs>10</commandlineArgs>
                 </configuration>
             </plugin>
         </plugins>
